@@ -1,4 +1,4 @@
-defmodule Staitstics do
+defmodule Statistics do
   def median do
     :ok
   end
@@ -10,9 +10,9 @@ defmodule Staitstics do
       |> Float.round(1)
   end
 
-  def mode(n, values) do
+  def mode(_n, values) do
     initial = %{}
-    values
+    grouped = values
     |>Enum.reduce(initial, fn val, acc ->
         case Map.get(acc, val) do
           nil ->
@@ -21,10 +21,16 @@ defmodule Staitstics do
             Map.put(acc, val, total + 1)
         end
       end)
-    |> Enum.sort(fn {k1, v1}, {k2, v2} -> v1 >= v2 end)
-    |> Enum.at(0)
+    max = Enum.max Map.values(grouped)
+
+    grouped
+      |> Enum.filter(fn {_, v} -> v == max end)
+      |> Enum.sort(fn {_k1, v1}, {_k2, v2} -> v1 >= v2 end)
+      |> Enum.at(0)
+      |> Tuple.to_list
+      |> Enum.at(0)
   end
 end
 
-Staitstics.mean(5, [1,2,3,4,5])
-Staitstics.mode(5, [1, 0, 0, 2, 3])
+Statistics.mean(5, [1,2,3,4,5])
+Statistics.mode(5, [1, 0, 0, 2, 3])
