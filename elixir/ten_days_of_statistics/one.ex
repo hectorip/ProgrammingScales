@@ -12,14 +12,15 @@ defmodule Staitstics do
 
   def mode(n, values) do
     initial = %{}
-    Enum.reduce(initial, fn val, acc ->
-      case Map.get(acc, val) do
-        nil ->
-          Map.put(acc, val, 1)
-        total ->
-          Map.put(acc, val, total + 1)
-      end
-    end)
+    values
+    |>Enum.reduce(initial, fn val, acc ->
+        case Map.get(acc, val) do
+          nil ->
+            Map.put(acc, val, 1)
+          total ->
+            Map.put(acc, val, total + 1)
+        end
+      end)
     |> Enum.sort(fn {k1, v1}, {k2, v2} -> v1 >= v2 end)
     |> Enum.at(0)
   end
