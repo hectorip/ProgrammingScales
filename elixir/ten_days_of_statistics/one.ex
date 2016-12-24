@@ -1,6 +1,12 @@
 defmodule Statistics do
-  def median do
-    :ok
+  def median(n, values) do
+    values = Enum.sort(values)
+    res = case rem(n, 2) do
+      0 ->
+        Float.round((Enum.at(values, div(n,2) - 1) + Enum.at(values, div(n,2))) / 2, 1)
+      1 ->
+        Enum.at(values, div(n,2))
+    end
   end
 
   def mean(n, values) do
@@ -25,12 +31,16 @@ defmodule Statistics do
 
     grouped
       |> Enum.filter(fn {_, v} -> v == max end)
-      |> Enum.sort(fn {_k1, v1}, {_k2, v2} -> v1 >= v2 end)
+      |> Enum.sort(fn {k1, _v1}, {k2, _v2} -> k1 <= k2 end)
+      |> IO.inspect
       |> Enum.at(0)
       |> Tuple.to_list
       |> Enum.at(0)
   end
 end
+n = String.to_integer(String.trim(IO.read(:line)))
+values = String.split(String.trim(IO.read(:line)), " ") |> Enum.map(&String.to_integer/1)
 
-Statistics.mean(5, [1,2,3,4,5])
-Statistics.mode(5, [1, 0, 0, 2, 3])
+IO.puts Statistics.mean(n, values)
+IO.puts Statistics.median(n, values)
+IO.puts Statistics.mode(n, values)
